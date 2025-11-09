@@ -4,10 +4,7 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
-import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.scheduler.BukkitTask
-import java.util.UUID
-import java.util.concurrent.TimeUnit
+import java.util.*
 
 data class CamPhase(
     val start: Location,
@@ -41,7 +38,7 @@ class CamPath(
     }
 
     private fun run() {
-        task = Bukkit.getAsyncScheduler().runAtFixedRate(plugin, {
+        task = Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, {
             val player = Bukkit.getPlayer(playerUUID) ?: run {
                 task.cancel();
                 stop();
@@ -69,7 +66,7 @@ class CamPath(
 
                 val loc = Location(start.world, x, y, z, yaw, pitch)
 
-                player.teleport(loc)
+                player.teleportAsync(loc)
 
                 val nextProgress = (tick + 1).toDouble() / phase.durationTicks
                 val nx = lerp(start.x, end.x, nextProgress)
@@ -92,7 +89,7 @@ class CamPath(
             currentPhase++
             tick = 0
             stay = 0
-        }, 0, 50, TimeUnit.MILLISECONDS)
+        }, 1, 1)
     }
 
     fun stop() {
