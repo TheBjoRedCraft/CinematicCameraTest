@@ -1,0 +1,1 @@
+See https://github.com/LitleProgrammer/CamRigTest/blob/master/src/main/java/de/littleprogrammer/camrig/Main.java
